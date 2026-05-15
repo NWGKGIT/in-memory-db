@@ -45,9 +45,28 @@ bool Database::load(const std::string &filename) {
     }
     return true;
 }
+
+bool Database::save(const std::string &filename) const {
+    std::ofstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open file " << filename << " for writing.\n";
+        return false;
+    }
+
+    for (const auto& row : m_table) {
+        for (size_t i = 0; i < row.cells.size(); ++i) {
+            file << row.cells[i] << (i == row.cells.size() - 1 ? "" : ",");
+        }
+        file << "\n";
+    }
+    return true;
 }
 
 void Database::display() const {
+    if (m_table.empty()) {
+        std::cout << "Database is empty.\n";
+        return;
+    }
     for (const auto& row: this->m_table) {
         for (const auto& cell : row.cells) {
             std::cout << cell << " | ";
@@ -56,28 +75,38 @@ void Database::display() const {
     }
 }
 
-
-void printCells(const auto& cells) {
+void printCells(const std::vector<std::string>& cells) {
     for (const auto& cell: cells) {
-        std::cout<<cell<<" | ";
+        std::cout << cell << " | ";
     }
-    std::cout<<"\n";
-
+    std::cout << "\n";
 }
 
-void Database::find(int colIndex, const std::string &value) const {
+void Database::find(size_t colIndex, const std::string &value) const {
+    if (m_table.empty()) {
+        std::cout << "Database is empty.\n";
+        return;
+    }
+
     bool found = false;
     for (const auto& row: m_table) {
         if (colIndex < row.cells.size()) {
             if (row.cells[colIndex] == value) {
                 printCells(row.cells);
-                found=true;
+                found = true;
             }
         }
-
     }
+
     if (!found) {
-        std::cout <<"No matches found for '" << value <<"' in column" <<colIndex <<".\n";
+        std::cout << "No matches found for '" << value << "' in column " << colIndex << ".\n";
     }
+}
 
+void Database::add(const std::vector<std::string> &cells) {
+    if (!m_table.empty() && cells.size() != m_table[0].cells.size()) {
+        std::cerr << "Error: Row has " << cells.size() << " columns, expected " << m_table[0].cells.size() << ".\n";
+        return;
+    }
+    m_table.push_back({cells});
 }

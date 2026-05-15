@@ -13,15 +13,15 @@ struct Row {
 };
 
 class Database {
-
 private:
     std::vector<Row> m_table;
 
 public:
-    void load(const std::string& filename);
+    bool load(const std::string& filename);
+    bool save(const std::string& filename) const;
     void display() const;
-    void find(int colIndex, const std::string& value) const;
-
+    void find(size_t colIndex, const std::string& value) const;
+    void add(const std::vector<std::string>& cells);
 };
 
 #endif //IN_MEMORY_DB_DATABASE_H
