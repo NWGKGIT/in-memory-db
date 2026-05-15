@@ -36,7 +36,7 @@ make
 - `EXIT`: Close the application.
 
 ## License
-MIT ofc since it's nothing but 3 files lol.
+MIT ofc since it's for learning. . .
 
 ## Future plans
 - maybe a UI?
