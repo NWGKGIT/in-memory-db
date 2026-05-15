@@ -10,11 +10,21 @@
 #include <sstream>
 
 
-void Database::load(const std::string &filename) {
+bool Database::load(const std::string &filename) {
     std::ifstream file(filename);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open file " << filename << "\n";
+        return false;
+    }
+
+    m_table.clear();
     std::string line;
+    size_t expectedCols = 0;
+    bool firstRow = true;
 
     while (std::getline(file, line)) {
+        if (line.empty()) continue;
+
         Row row;
         std::stringstream ss(line);
         std::string cell;
@@ -22,8 +32,19 @@ void Database::load(const std::string &filename) {
         while (std::getline(ss, cell, ',')) {
             row.cells.push_back(cell);
         }
+
+        if (firstRow) {
+            expectedCols = row.cells.size();
+            firstRow = false;
+        } else if (row.cells.size() != expectedCols) {
+            std::cerr << "Warning: Row has " << row.cells.size() << " columns, expected " << expectedCols << ". Skipping.\n";
+            continue;
+        }
+
         this->m_table.push_back(row);
     }
+    return true;
+}
 }
 
 void Database::display() const {
