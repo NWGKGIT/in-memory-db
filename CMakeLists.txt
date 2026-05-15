@@ -3,6 +3,8 @@ project(In_Memory_DB)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(In_Memory_DB main.cpp
-        database.h
-        database.cpp)
+include_directories(include)
+
+add_executable(In_Memory_DB 
+        src/main.cpp
+        src/database.cpp)

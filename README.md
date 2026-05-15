@@ -11,6 +11,12 @@ A very simple, minimal in-memory database implemented in C++.
 - **Search**: Basic search functionality by column index.
 - **Robustness**: Basic error handling for file operations and CLI inputs.
 
+## Project Structure
+- `include/`: Header files (`database.h`).
+- `src/`: Source files (`database.cpp`, `main.cpp`).
+- `data/`: (Optional) CSV files like `sample.csv`.
+- `CMakeLists.txt`: Build configuration.
+
 ## Quick Start
 
 ### Build
